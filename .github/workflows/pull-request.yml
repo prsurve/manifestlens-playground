@@ -1,0 +1,25 @@
+name: ManifestLens on pull requests
+
+# Open a pull request that edits k8s/** to see the annotations, the summary and the comment.
+on:
+  pull_request:
+    paths: ['k8s/**']
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: prsurve/manifestlens@v1
+        with:
+          paths: |
+            k8s/**
+            !k8s/legacy/**
+          scope: new
+          fail-on: warning
