@@ -26,7 +26,7 @@ jobs:
           paths: k8s/good/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_findings: ${{ steps.good.outputs.findings }}
           ACTUAL_passed: ${{ steps.good.outputs.passed }}
@@ -40,7 +40,7 @@ jobs:
           paths: k8s/bad/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_errors: ${{ steps.bad.outputs.errors }}
           ACTUAL_warnings: ${{ steps.bad.outputs.warnings }}
@@ -56,7 +56,7 @@ jobs:
         with:
           paths: k8s/bad/**
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_outcome: ${{ steps.enforce.outcome }}
           ACTUAL_result: ${{ steps.enforce.outputs.result }}
@@ -71,7 +71,7 @@ jobs:
             !k8s/legacy/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_files_checked: ${{ steps.legacy.outputs.files-checked }}
           ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
@@ -92,7 +92,7 @@ jobs:
           paths: k8s/good/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_findings: ${{ steps.good.outputs.findings }}
           ACTUAL_passed: ${{ steps.good.outputs.passed }}
@@ -106,7 +106,7 @@ jobs:
           paths: k8s/bad/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_errors: ${{ steps.bad.outputs.errors }}
           ACTUAL_warnings: ${{ steps.bad.outputs.warnings }}
@@ -122,7 +122,7 @@ jobs:
         with:
           paths: k8s/bad/**
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_outcome: ${{ steps.enforce.outcome }}
           ACTUAL_result: ${{ steps.enforce.outputs.result }}
@@ -137,7 +137,7 @@ jobs:
             !k8s/legacy/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_files_checked: ${{ steps.legacy.outputs.files-checked }}
           ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
@@ -158,7 +158,7 @@ jobs:
           paths: k8s/good/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_findings: ${{ steps.good.outputs.findings }}
           ACTUAL_passed: ${{ steps.good.outputs.passed }}
@@ -172,7 +172,7 @@ jobs:
           paths: k8s/bad/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_errors: ${{ steps.bad.outputs.errors }}
           ACTUAL_warnings: ${{ steps.bad.outputs.warnings }}
@@ -188,7 +188,7 @@ jobs:
         with:
           paths: k8s/bad/**
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_outcome: ${{ steps.enforce.outcome }}
           ACTUAL_result: ${{ steps.enforce.outputs.result }}
@@ -203,7 +203,7 @@ jobs:
             !k8s/legacy/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_files_checked: ${{ steps.legacy.outputs.files-checked }}
           ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
@@ -224,7 +224,7 @@ jobs:
           paths: k8s/good/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_findings: ${{ steps.good.outputs.findings }}
           ACTUAL_passed: ${{ steps.good.outputs.passed }}
@@ -238,7 +238,7 @@ jobs:
           paths: k8s/bad/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_errors: ${{ steps.bad.outputs.errors }}
           ACTUAL_warnings: ${{ steps.bad.outputs.warnings }}
@@ -254,7 +254,7 @@ jobs:
         with:
           paths: k8s/bad/**
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_outcome: ${{ steps.enforce.outcome }}
           ACTUAL_result: ${{ steps.enforce.outputs.result }}
@@ -269,7 +269,7 @@ jobs:
             !k8s/legacy/**
           mode: report
           annotations: false
-          comment: false
+          comment: never
       - env:
           ACTUAL_files_checked: ${{ steps.legacy.outputs.files-checked }}
           ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
