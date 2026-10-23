@@ -1,0 +1,15 @@
+# A custom resource: ManifestLens has no rules for it and should say so.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: web-tls
+spec:
+  secretName: web-tls
+  dnsNames: [example.com]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: settings
+data:
+  mode: demo

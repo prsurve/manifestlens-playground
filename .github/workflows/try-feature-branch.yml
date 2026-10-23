@@ -1,0 +1,87 @@
+name: Try a ManifestLens branch
+
+# Runs the action from an unmerged commit of prsurve/manifestlens (PR #23), not a release.
+# Open a PR from this branch to see the comment, annotations and summary of that commit.
+on:
+  pull_request:
+    paths: ['k8s/**', '.github/workflows/try-feature-branch.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Risky manifest, with the new rules and suggested fixes
+        id: bad
+        uses: prsurve/manifestlens@1358f780843fd61380326db8252364d7036f03d9
+        with:
+          paths: k8s/bad/**
+          mode: report
+          annotations: false
+          comment: never
+          suggest-fixes: true
+          fix-patch-file: bad.patch
+          report-file: bad.json
+      - env:
+          ACTUAL_errors: ${{ steps.bad.outputs.errors }}
+          ACTUAL_warnings: ${{ steps.bad.outputs.warnings }}
+          ACTUAL_infos: ${{ steps.bad.outputs.infos }}
+          ACTUAL_findings: ${{ steps.bad.outputs.findings }}
+        run: scripts/assert.sh bad errors=2 warnings=9 infos=7 findings=18
+      - name: The suggested patch applies cleanly and the file is untouched
+        run: |
+          test -s bad.patch
+          git apply --check bad.patch
+          git diff --exit-code -- k8s
+
+      - name: Complex YAML (flow style, anchors, merge keys) gets fixes
+        id: complex
+        uses: prsurve/manifestlens@1358f780843fd61380326db8252364d7036f03d9
+        with:
+          paths: k8s/complex/**
+          mode: report
+          annotations: false
+          comment: never
+          suggest-fixes: true
+          fix-max-risk: medium
+          fix-patch-file: complex.patch
+      - name: The complex patch applies, and keeps the anchor and flow style
+        run: |
+          test "${{ steps.complex.outputs.fixes-available }}" -ge 3
+          git apply --check complex.patch
+          git apply complex.patch
+          grep -q '&sec' k8s/complex/complex.yaml
+          grep -q '<<: \*sec' k8s/complex/complex.yaml
+          git diff --stat -- k8s
+
+      - name: A custom resource is reported as not checked
+        id: crd
+        uses: prsurve/manifestlens@1358f780843fd61380326db8252364d7036f03d9
+        with:
+          paths: k8s/crd/**
+          mode: report
+          annotations: false
+          comment: never
+          report-file: crd.json
+      - name: The report lists both documents under notChecked
+        run: |
+          test "$(jq '.notChecked | length' crd.json)" = "2"
+          jq -r '.notChecked[] | "\(.level)  \(.object)"' crd.json
+
+      - name: Whole folder as a pull request would see it (comment and summary)
+        if: github.event_name == 'pull_request'
+        uses: prsurve/manifestlens@1358f780843fd61380326db8252364d7036f03d9
+        with:
+          paths: |
+            k8s/**
+            !k8s/legacy/**
+          mode: report
+          comment: always
+          suggest-fixes: true
+          label: feature-branch
