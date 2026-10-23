@@ -17,4 +17,8 @@ A test bed for [ManifestLens](https://github.com/prsurve/manifestlens). Nothing 
 - **Pull requests** (`pull-request.yml`) runs `@v1` with `scope: new` so you can try annotations and the comment.
   Edit a file under `k8s/` on a branch and open a PR.
 
+- **Try a ManifestLens commit** (`try-feature-branch.yml`) runs the action from any commit of the main repo (`uses: ./lens`).
+  `prsurve/manifestlens` dispatches it for every pull request, so a change is tried here before it is merged.
+  Run it by hand from the Actions tab with a `ref`.
+
 Not covered: pull requests from forks and `pull_request_target`.
