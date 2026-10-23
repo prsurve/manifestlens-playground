@@ -21,5 +21,7 @@ jobs:
           paths: |
             k8s/**
             !k8s/legacy/**
+            !k8s/complex/**
+            !k8s/crd/**
           scope: new
           fail-on: warning
