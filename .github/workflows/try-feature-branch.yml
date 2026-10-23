@@ -1,0 +1,125 @@
+name: Try a ManifestLens commit
+
+# Runs the action from any commit of prsurve/manifestlens (default: its main branch) instead of a
+# release. prsurve/manifestlens starts this automatically for every pull request, passing the PR's
+# head commit as `ref`. You can also run it by hand from the Actions tab.
+# Counts are checked with ranges, not exact numbers, so ordinary rule additions do not break it.
+run-name: Try ManifestLens ${{ inputs.ref || 'main' }} ${{ inputs.correlation }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit, branch or tag of prsurve/manifestlens to run
+        default: main
+      correlation:
+        description: Id the caller uses to find this run (leave empty by hand)
+        default: ''
+  pull_request:
+    paths: ['k8s/**', '.github/workflows/try-feature-branch.yml']
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: prsurve/manifestlens
+          ref: ${{ inputs.ref || 'main' }}
+          path: lens
+      - name: Which commit is under test
+        run: |
+          echo "ManifestLens commit: $(git -C lens rev-parse HEAD)" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Hardened manifest stays clean
+        id: good
+        uses: ./lens
+        with:
+          paths: k8s/good/**
+          mode: report
+          annotations: false
+          comment: never
+      - run: |
+          test "${{ steps.good.outputs.findings }}" = "0"
+          test "${{ steps.good.outputs.passed }}" = "true"
+
+      - name: Risky manifest, with suggested fixes
+        id: bad
+        uses: ./lens
+        with:
+          paths: k8s/bad/**
+          mode: report
+          annotations: false
+          comment: never
+          suggest-fixes: true
+          fix-max-risk: high
+          fix-patch-file: bad.patch
+          sarif-file: bad.sarif
+      - name: Findings, a patch that applies, and untouched files
+        run: |
+          test "${{ steps.bad.outputs.errors }}" -ge 2
+          test "${{ steps.bad.outputs.findings }}" -ge 16
+          test "${{ steps.bad.outputs.result }}" = "report"
+          test -s bad.patch
+          git apply --check bad.patch
+          test -s bad.sarif
+          git diff --exit-code -- k8s
+
+      - name: Enforce mode fails the risky manifest
+        id: enforce
+        uses: ./lens
+        continue-on-error: true
+        with:
+          paths: k8s/bad/**
+          annotations: false
+          comment: never
+      - run: test "${{ steps.enforce.outcome }}" = "failure"
+
+      - name: Complex YAML (flow style, anchors, merge keys) gets fixes
+        id: complex
+        uses: ./lens
+        with:
+          paths: k8s/complex/**
+          mode: report
+          annotations: false
+          comment: never
+          suggest-fixes: true
+          fix-max-risk: medium
+          fix-patch-file: complex.patch
+      - name: The patch applies and keeps the anchor and the merge key
+        run: |
+          test "${{ steps.complex.outputs.fixes-available }}" -ge 3
+          git apply --check complex.patch
+          git apply complex.patch
+          grep -q '&sec' k8s/complex/complex.yaml
+          grep -q '<<: \*sec' k8s/complex/complex.yaml
+          git diff --stat -- k8s
+
+      - name: Kinds without rules are reported as not checked
+        uses: ./lens
+        with:
+          paths: k8s/crd/**
+          mode: report
+          annotations: false
+          comment: never
+          report-file: crd.json
+      - run: |
+          test "$(jq '.notChecked | length' crd.json)" = "2"
+          jq -r '.notChecked[] | "\(.level)  \(.object)"' crd.json
+
+      - name: Whole folder as a pull request sees it (comment and summary)
+        if: github.event_name == 'pull_request'
+        uses: ./lens
+        with:
+          paths: |
+            k8s/**
+            !k8s/legacy/**
+          mode: report
+          comment: always
+          suggest-fixes: true
+          label: feature-branch

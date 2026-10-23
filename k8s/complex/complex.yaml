@@ -1,0 +1,19 @@
+# Flow style, an anchor with aliases and a merge key: the fix engine used to skip all of these.
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: complex, labels: {app: complex}}
+spec:
+  replicas: 2
+  selector: {matchLabels: {app: complex}}
+  template:
+    metadata: {labels: {app: complex}}
+    spec:
+      containers:
+        - {name: a, image: "nginx:1.27", securityContext: &sec {readOnlyRootFilesystem: true}}
+        - name: b
+          image: nginx:1.27
+          securityContext: *sec
+        - name: c
+          image: nginx:1.27
+          securityContext:
+            <<: *sec
