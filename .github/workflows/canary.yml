@@ -69,6 +69,8 @@ jobs:
           paths: |
             k8s/**
             !k8s/legacy/**
+            !k8s/complex/**
+            !k8s/crd/**
           mode: report
           annotations: false
           comment: never
@@ -135,6 +137,8 @@ jobs:
           paths: |
             k8s/**
             !k8s/legacy/**
+            !k8s/complex/**
+            !k8s/crd/**
           mode: report
           annotations: false
           comment: never
@@ -201,6 +205,8 @@ jobs:
           paths: |
             k8s/**
             !k8s/legacy/**
+            !k8s/complex/**
+            !k8s/crd/**
           mode: report
           annotations: false
           comment: never
@@ -267,6 +273,8 @@ jobs:
           paths: |
             k8s/**
             !k8s/legacy/**
+            !k8s/complex/**
+            !k8s/crd/**
           mode: report
           annotations: false
           comment: never
