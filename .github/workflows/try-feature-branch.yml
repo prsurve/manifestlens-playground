@@ -26,6 +26,7 @@ jobs:
           annotations: false
           comment: never
           suggest-fixes: true
+          fix-max-risk: high
           fix-patch-file: bad.patch
           report-file: bad.json
       - env:
