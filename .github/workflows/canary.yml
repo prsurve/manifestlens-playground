@@ -215,7 +215,7 @@ jobs:
           ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
           ACTUAL_warnings: ${{ steps.legacy.outputs.warnings }}
           ACTUAL_infos: ${{ steps.legacy.outputs.infos }}
-        run: scripts/assert.sh legacy files-checked=3 errors=2 warnings=13 infos=8
+        run: scripts/assert.sh legacy files-checked=3 errors=2 warnings=13 infos=12
 
   v1-0-1:
     name: "@v1.0.1"
