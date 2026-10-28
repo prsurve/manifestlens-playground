@@ -183,7 +183,7 @@ jobs:
           ACTUAL_infos: ${{ steps.bad.outputs.infos }}
           ACTUAL_findings: ${{ steps.bad.outputs.findings }}
           ACTUAL_result: ${{ steps.bad.outputs.result }}
-        run: scripts/assert.sh bad errors=2 warnings=9 infos=5 findings=16 result=report
+        run: scripts/assert.sh bad errors=2 warnings=9 infos=7 findings=18 result=report
 
       - name: Enforce mode fails on the risky manifest
         id: enforce
