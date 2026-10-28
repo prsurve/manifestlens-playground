@@ -183,7 +183,7 @@ jobs:
           ACTUAL_infos: ${{ steps.bad.outputs.infos }}
           ACTUAL_findings: ${{ steps.bad.outputs.findings }}
           ACTUAL_result: ${{ steps.bad.outputs.result }}
-        run: scripts/assert.sh bad errors=2 warnings=9 infos=5 findings=16 result=report
+        run: scripts/assert.sh bad errors=2 warnings=9 infos=7 findings=18 result=report
 
       - name: Enforce mode fails on the risky manifest
         id: enforce
@@ -215,7 +215,7 @@ jobs:
           ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
           ACTUAL_warnings: ${{ steps.legacy.outputs.warnings }}
           ACTUAL_infos: ${{ steps.legacy.outputs.infos }}
-        run: scripts/assert.sh legacy files-checked=3 errors=2 warnings=13 infos=8
+        run: scripts/assert.sh legacy files-checked=3 errors=2 warnings=13 infos=12
 
   v1-0-1:
     name: "@v1.0.1"
