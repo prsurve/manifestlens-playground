@@ -1,17 +1,17 @@
-name: Try a ManifestLens commit
+name: Try a k8s-manifestlens commit
 
-# Runs the action from any commit of prsurve/manifestlens (default: its main branch) instead of a
-# release. prsurve/manifestlens starts this automatically for every pull request, passing the PR's
+# Runs the action from any commit of prsurve/k8s-manifestlens (default: its main branch) instead of a
+# release. prsurve/k8s-manifestlens starts this automatically for every pull request, passing the PR's
 # head commit as `ref`. You can also run it by hand from the Actions tab. (For comments and annotations on a
 # playground PR, see pull-request.yml.)
 # Counts are checked with ranges, not exact numbers, so ordinary rule additions do not break it.
-run-name: Try ManifestLens ${{ inputs.ref || 'main' }} ${{ inputs.correlation }}
+run-name: Try k8s-manifestlens ${{ inputs.ref || 'main' }} ${{ inputs.correlation }}
 
 on:
   workflow_dispatch:
     inputs:
       ref:
-        description: Commit, branch or tag of prsurve/manifestlens to run
+        description: Commit, branch or tag of prsurve/k8s-manifestlens to run
         default: main
       correlation:
         description: Id the caller uses to find this run (leave empty by hand)
@@ -27,12 +27,12 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/checkout@v7
         with:
-          repository: prsurve/manifestlens
+          repository: prsurve/k8s-manifestlens
           ref: ${{ inputs.ref || 'main' }}
           path: lens
       - name: Which commit is under test
         run: |
-          echo "ManifestLens commit: $(git -C lens rev-parse HEAD)" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "k8s-manifestlens commit: $(git -C lens rev-parse HEAD)" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Hardened manifest stays clean
         id: good

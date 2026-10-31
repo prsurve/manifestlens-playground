@@ -21,7 +21,7 @@ jobs:
 
       - name: Hardened manifest has no findings
         id: good
-        uses: prsurve/manifestlens@v1
+        uses: prsurve/k8s-manifestlens@v1
         with:
           paths: k8s/good/**
           mode: report
@@ -35,7 +35,7 @@ jobs:
 
       - name: Risky manifest has the known findings
         id: bad
-        uses: prsurve/manifestlens@v1
+        uses: prsurve/k8s-manifestlens@v1
         with:
           paths: k8s/bad/**
           mode: report
@@ -51,7 +51,7 @@ jobs:
 
       - name: Enforce mode fails on the risky manifest
         id: enforce
-        uses: prsurve/manifestlens@v1
+        uses: prsurve/k8s-manifestlens@v1
         continue-on-error: true
         with:
           paths: k8s/bad/**
@@ -64,7 +64,7 @@ jobs:
 
       - name: Excluding the legacy folder drops its findings
         id: legacy
-        uses: prsurve/manifestlens@v1
+        uses: prsurve/k8s-manifestlens@v1
         with:
           paths: |
             k8s/**
@@ -89,7 +89,7 @@ jobs:
 
       - name: Hardened manifest has no findings
         id: good
-        uses: prsurve/manifestlens@v1.0.0
+        uses: prsurve/k8s-manifestlens@v1.0.0
         with:
           paths: k8s/good/**
           mode: report
@@ -103,7 +103,7 @@ jobs:
 
       - name: Risky manifest has the known findings
         id: bad
-        uses: prsurve/manifestlens@v1.0.0
+        uses: prsurve/k8s-manifestlens@v1.0.0
         with:
           paths: k8s/bad/**
           mode: report
@@ -119,7 +119,7 @@ jobs:
 
       - name: Enforce mode fails on the risky manifest
         id: enforce
-        uses: prsurve/manifestlens@v1.0.0
+        uses: prsurve/k8s-manifestlens@v1.0.0
         continue-on-error: true
         with:
           paths: k8s/bad/**
@@ -132,7 +132,7 @@ jobs:
 
       - name: Excluding the legacy folder drops its findings
         id: legacy
-        uses: prsurve/manifestlens@v1.0.0
+        uses: prsurve/k8s-manifestlens@v1.0.0
         with:
           paths: |
             k8s/**
@@ -157,7 +157,7 @@ jobs:
 
       - name: Hardened manifest has no findings
         id: good
-        uses: prsurve/manifestlens@main
+        uses: prsurve/k8s-manifestlens@main
         with:
           paths: k8s/good/**
           mode: report
@@ -171,7 +171,7 @@ jobs:
 
       - name: Risky manifest has the known findings
         id: bad
-        uses: prsurve/manifestlens@main
+        uses: prsurve/k8s-manifestlens@main
         with:
           paths: k8s/bad/**
           mode: report
@@ -187,7 +187,7 @@ jobs:
 
       - name: Enforce mode fails on the risky manifest
         id: enforce
-        uses: prsurve/manifestlens@main
+        uses: prsurve/k8s-manifestlens@main
         continue-on-error: true
         with:
           paths: k8s/bad/**
@@ -200,7 +200,7 @@ jobs:
 
       - name: Excluding the legacy folder drops its findings
         id: legacy
-        uses: prsurve/manifestlens@main
+        uses: prsurve/k8s-manifestlens@main
         with:
           paths: |
             k8s/**
@@ -225,7 +225,7 @@ jobs:
 
       - name: Hardened manifest has no findings
         id: good
-        uses: prsurve/manifestlens@v1.0.1
+        uses: prsurve/k8s-manifestlens@v1.0.1
         with:
           paths: k8s/good/**
           mode: report
@@ -239,7 +239,7 @@ jobs:
 
       - name: Risky manifest has the known findings
         id: bad
-        uses: prsurve/manifestlens@v1.0.1
+        uses: prsurve/k8s-manifestlens@v1.0.1
         with:
           paths: k8s/bad/**
           mode: report
@@ -255,7 +255,7 @@ jobs:
 
       - name: Enforce mode fails on the risky manifest
         id: enforce
-        uses: prsurve/manifestlens@v1.0.1
+        uses: prsurve/k8s-manifestlens@v1.0.1
         continue-on-error: true
         with:
           paths: k8s/bad/**
@@ -268,7 +268,7 @@ jobs:
 
       - name: Excluding the legacy folder drops its findings
         id: legacy
-        uses: prsurve/manifestlens@v1.0.1
+        uses: prsurve/k8s-manifestlens@v1.0.1
         with:
           paths: |
             k8s/**

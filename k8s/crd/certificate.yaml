@@ -1,4 +1,4 @@
-# A custom resource: ManifestLens has no rules for it and should say so.
+# A custom resource: k8s-manifestlens has no rules for it and should say so.
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
