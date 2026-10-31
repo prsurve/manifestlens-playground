@@ -1,4 +1,4 @@
-name: ManifestLens on pull requests
+name: k8s-manifestlens on pull requests
 
 # Open a pull request that edits k8s/** to see the annotations, the summary and the comment.
 on:
@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: prsurve/manifestlens@v1
+      - uses: prsurve/k8s-manifestlens@v1
         with:
           paths: |
             k8s/**
