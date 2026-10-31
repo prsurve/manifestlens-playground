@@ -47,7 +47,7 @@ jobs:
           ACTUAL_infos: ${{ steps.bad.outputs.infos }}
           ACTUAL_findings: ${{ steps.bad.outputs.findings }}
           ACTUAL_result: ${{ steps.bad.outputs.result }}
-        run: scripts/assert.sh bad errors=2 warnings=9 infos=5 findings=16 result=report
+        run: scripts/assert.sh bad errors=2 warnings=9 infos=7 findings=18 result=report
 
       - name: Enforce mode fails on the risky manifest
         id: enforce
@@ -79,7 +79,7 @@ jobs:
           ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
           ACTUAL_warnings: ${{ steps.legacy.outputs.warnings }}
           ACTUAL_infos: ${{ steps.legacy.outputs.infos }}
-        run: scripts/assert.sh legacy files-checked=3 errors=2 warnings=13 infos=8
+        run: scripts/assert.sh legacy files-checked=3 errors=2 warnings=13 infos=12
 
   v1-0-0:
     name: "@v1.0.0"
@@ -201,6 +201,74 @@ jobs:
       - name: Excluding the legacy folder drops its findings
         id: legacy
         uses: prsurve/k8s-manifestlens@main
+        with:
+          paths: |
+            k8s/**
+            !k8s/legacy/**
+            !k8s/complex/**
+            !k8s/crd/**
+          mode: report
+          annotations: false
+          comment: never
+      - env:
+          ACTUAL_files_checked: ${{ steps.legacy.outputs.files-checked }}
+          ACTUAL_errors: ${{ steps.legacy.outputs.errors }}
+          ACTUAL_warnings: ${{ steps.legacy.outputs.warnings }}
+          ACTUAL_infos: ${{ steps.legacy.outputs.infos }}
+        run: scripts/assert.sh legacy files-checked=3 errors=2 warnings=13 infos=12
+
+  v1-1-0:
+    name: "@v1.1.0"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Hardened manifest has no findings
+        id: good
+        uses: prsurve/k8s-manifestlens@v1.1.0
+        with:
+          paths: k8s/good/**
+          mode: report
+          annotations: false
+          comment: never
+      - env:
+          ACTUAL_findings: ${{ steps.good.outputs.findings }}
+          ACTUAL_passed: ${{ steps.good.outputs.passed }}
+          ACTUAL_files_checked: ${{ steps.good.outputs.files-checked }}
+        run: scripts/assert.sh good findings=0 passed=true files-checked=1
+
+      - name: Risky manifest has the known findings
+        id: bad
+        uses: prsurve/k8s-manifestlens@v1.1.0
+        with:
+          paths: k8s/bad/**
+          mode: report
+          annotations: false
+          comment: never
+      - env:
+          ACTUAL_errors: ${{ steps.bad.outputs.errors }}
+          ACTUAL_warnings: ${{ steps.bad.outputs.warnings }}
+          ACTUAL_infos: ${{ steps.bad.outputs.infos }}
+          ACTUAL_findings: ${{ steps.bad.outputs.findings }}
+          ACTUAL_result: ${{ steps.bad.outputs.result }}
+        run: scripts/assert.sh bad errors=2 warnings=9 infos=7 findings=18 result=report
+
+      - name: Enforce mode fails on the risky manifest
+        id: enforce
+        uses: prsurve/k8s-manifestlens@v1.1.0
+        continue-on-error: true
+        with:
+          paths: k8s/bad/**
+          annotations: false
+          comment: never
+      - env:
+          ACTUAL_outcome: ${{ steps.enforce.outcome }}
+          ACTUAL_result: ${{ steps.enforce.outputs.result }}
+        run: scripts/assert.sh enforce outcome=failure result=fail
+
+      - name: Excluding the legacy folder drops its findings
+        id: legacy
+        uses: prsurve/k8s-manifestlens@v1.1.0
         with:
           paths: |
             k8s/**
