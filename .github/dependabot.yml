@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # The canary deliberately runs fixed older releases and the moving @v1 and @main refs.
+      # Dependabot must not "update" them.
+      - dependency-name: prsurve/k8s-manifestlens
